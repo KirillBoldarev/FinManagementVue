@@ -89,9 +89,11 @@ import { required, email, minLength } from "@vuelidate/validators";
 import { useRouter } from "vue-router";
 import { reactive } from "vue";
 import { useUserStore } from "@/stores/userStore.js";
+import { useErrorStore } from "@/stores/errorStore";
 import { addItem } from "@/firebase/firestore.js";
 
 const userStore = useUserStore();
+const errorStore = useErrorStore();
 const router = useRouter();
 
 const formData = reactive({
@@ -113,9 +115,14 @@ async function registration() {
     v$.value.$touch();
     return;
   }
-  await userStore.registrateUser(formData.email, formData.password);
-  await addItem("users", formData);
-  await userStore.login(formData.email, formData.password);
-  router.push("/");
+
+  try {
+    await userStore.registrateUser(formData.email, formData.password);
+    await addItem("users", formData);
+    await userStore.login(formData.email, formData.password);
+    router.push("/");
+  } catch (error) {
+    errorStore.setError(error);
+  }
 }
 </script>

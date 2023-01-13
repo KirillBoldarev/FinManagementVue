@@ -73,10 +73,12 @@ import message from "@/composables/message";
 import messagesList from "@/composables/messagesList";
 import { monitorAuth } from "@/firebase/auth";
 import { useUserStore } from "@/stores/userStore";
+import { useErrorStore } from "@/stores/errorStore";
 
 const router = useRouter();
 const route = useRoute();
 const userStore = useUserStore();
+const errorStore = useErrorStore();
 
 const formData = reactive({ email: "", password: "" });
 const rules = {
@@ -101,6 +103,8 @@ function login() {
     userStore.login(formData.email, formData.password).then(() => {
       router.push("/");
     });
-  } catch (error) {}
+  } catch (error) {
+    errorStore.setError(error);
+  }
 }
 </script>

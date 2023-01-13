@@ -1,5 +1,6 @@
 /* eslint-disable no-useless-catch */
 import { defineStore } from "pinia";
+import { useErrorStore } from "./errorStore";
 import { ref } from "vue";
 
 import {
@@ -14,20 +15,23 @@ const auth = getAuth(firebaseApp);
 
 export const useUserStore = defineStore("user", () => {
   const isAuth = ref({});
+  const errorStore = useErrorStore();
 
   async function login(email, password) {
-    console.log("данные ушедшие для логина", email, password);
-    const result = await signInWithEmailAndPassword(auth, email, password);
-    isAuth.value = result.catch((er) => {
-      throw er;
-    });
+    try {
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      isAuth.value = result;
+    } catch (error) {
+      errorStore.setError(error);
+      throw error;
+    }
   }
 
   async function registrateUser(email, password) {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      console.log("Успешно проведена регистрация");
     } catch (error) {
+      errorStore.setError(error);
       throw error;
     }
   }
@@ -38,7 +42,12 @@ export const useUserStore = defineStore("user", () => {
   }
 
   async function logout() {
-    await signOut(auth).then((isAuth.value = {}));
+    try {
+      await signOut(auth);
+      isAuth.value = {};
+    } catch (error) {
+      errorStore.setError(error);
+    }
   }
 
   return {

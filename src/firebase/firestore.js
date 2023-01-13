@@ -1,4 +1,4 @@
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore";
 import { firebaseApp } from "./firebase";
 
 const firestore = getFirestore(firebaseApp);
@@ -12,4 +12,9 @@ export async function addItem(collectionName, item) {
     console.log("Ошибка при добавлении документа", error);
     throw error;
   }
+}
+
+export async function getItem(collection) {
+  const data = await getDocs(collection(firestore, collection));
+  return data;
 }
