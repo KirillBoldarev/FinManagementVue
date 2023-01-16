@@ -65,7 +65,11 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
-  if (to.name !== "login" && !Object.keys(authStore.isAuth).length)
+  if (
+    to.name !== "login" &&
+    to.name !== "registration" &&
+    !Object.keys(authStore.isAuth).length
+  )
     next({ name: "login" });
   else next();
 });
