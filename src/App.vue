@@ -5,12 +5,17 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import EmptyLayout from "./components/layouts/EmptyLayout.vue";
 import MainLayout from "./components/layouts/MainLayout.vue";
+import { monitorAuth } from "@/firebase/auth";
 
 const route = useRoute();
+
+onMounted(() => {
+  monitorAuth();
+});
 
 const layout = computed(() => {
   if (route.meta.layout === "Empty") {

@@ -27,22 +27,6 @@ export const useInfoStore = defineStore("info", () => {
 
   async function fetchCurrency() {
     const result = await fetch("https://www.cbr-xml-daily.ru/daily_json.js");
-
-    /*     const key = process.env.VUE_APP_FIXER;
-
-    const myHeaders = new Headers();
-    myHeaders.append("apikey", key);
-
-    const requestOptions = {
-      method: "GET",
-      redirect: "follow",
-      headers: myHeaders,
-    };
-
-    const res = await fetch(
-      "https://api.apilayer.com/fixer/convert?to=RUB&from=USD&amount=1",
-      requestOptions
-    ); */
     return await result.json();
   }
 

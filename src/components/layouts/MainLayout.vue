@@ -20,18 +20,8 @@
 <script setup>
 import NavBar from "./NavBar.vue";
 import SideBar from "./SideBar.vue";
-import { ref, onMounted } from "vue";
-import { useInfoStore } from "@/stores/infoStore";
-const infoStore = useInfoStore();
+import { ref } from "vue";
 const navbarIsOpen = ref(true);
-
-onMounted(async () => {
-  /*   if (!infoStore.info) {
-    console.log("Данных нет, нужно подгрузить");
-    infoStore.fetchUserInfo();
-  } */
-  await infoStore.fetchUserInfo();
-});
 </script>
 
 <style lang="scss"></style>
