@@ -5,6 +5,7 @@ import { initializeApp } from "firebase/app";
 export const firebaseApp = initializeApp({
   apiKey: "AIzaSyBCNnVRb47o-VoC-YCOg3BUijQNAjlKrOs",
   authDomain: "fin-manage-2b47a.firebaseapp.com",
+  databaseURL: "https://fin-manage-2b47a-default-rtdb.firebaseio.com",
   projectId: "fin-manage-2b47a",
   storageBucket: "fin-manage-2b47a.appspot.com",
   messagingSenderId: "21657985270",

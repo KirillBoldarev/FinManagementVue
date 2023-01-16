@@ -7,7 +7,6 @@
         </a>
         <span class="black-text">{{ filterDate(date, "datetime") }}</span>
       </div>
-      <button @click="userStore.getUId">КНОПКА</button>
       <ul class="right hide-on-small-and-down">
         <li>
           <a
@@ -16,7 +15,7 @@
             data-target="dropdown"
             ref="dropdownRef"
           >
-            USER NAME
+            {{ userName }}
             <i class="material-icons right">arrow_drop_down</i>
           </a>
 
@@ -40,12 +39,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import filterDate from "@/composables/filterDate";
-import { useUserStore } from "@/stores/userStore";
+import { useAuthStore } from "@/stores/authStore";
+import { useInfoStore } from "@/stores/infoStore";
 
-const userStore = useUserStore();
+const authStore = useAuthStore();
+const infoStore = useInfoStore();
 
 const emit = defineEmits(["clickOnNavbar"]);
 const router = useRouter();
@@ -53,6 +54,13 @@ const dropdownRef = ref(null);
 const dropdown = ref(null);
 const date = ref(new Date());
 const dateInterval = ref(null);
+
+const userName = computed(() => {
+  if (infoStore.info === undefined) {
+    return "Пройдите процедуру авторизации";
+  }
+  return infoStore.info.name;
+});
 
 onMounted(() => {
   dateInterval.value = setInterval(() => {
@@ -74,6 +82,6 @@ onBeforeUnmount(() => {
 });
 
 function logout() {
-  userStore.logout().then(router.push("/login?message=logout"));
+  authStore.logout().then(router.push("/login?message=logout"));
 }
 </script>

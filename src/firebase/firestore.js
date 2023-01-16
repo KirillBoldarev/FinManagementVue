@@ -6,7 +6,6 @@ const firestore = getFirestore(firebaseApp);
 export async function addItem(collectionName, item) {
   try {
     const document = await addDoc(collection(firestore, collectionName), item);
-    console.log("Объект был успешно добавлен в базу с ID:", document.id);
     return document;
   } catch (error) {
     console.log("Ошибка при добавлении документа", error);
@@ -14,7 +13,15 @@ export async function addItem(collectionName, item) {
   }
 }
 
-export async function getItem(collection) {
-  const data = await getDocs(collection(firestore, collection));
-  return data;
+export async function getCollection(collectionName) {
+  try {
+    const formattedData = [];
+    const data = await getDocs(collection(firestore, collectionName));
+    data.forEach((document) => {
+      formattedData.push({ id: document.id, ...document.data() });
+    });
+    return formattedData;
+  } catch (error) {
+    console.log(error);
+  }
 }

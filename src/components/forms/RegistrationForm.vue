@@ -88,11 +88,10 @@ import { useVuelidate } from "@vuelidate/core";
 import { required, email, minLength } from "@vuelidate/validators";
 import { useRouter } from "vue-router";
 import { reactive } from "vue";
-import { useUserStore } from "@/stores/userStore.js";
+import { useAuthStore } from "@/stores/authStore.js";
 import { useErrorStore } from "@/stores/errorStore";
-import { addItem } from "@/firebase/firestore.js";
 
-const userStore = useUserStore();
+const authStore = useAuthStore();
 const errorStore = useErrorStore();
 const router = useRouter();
 
@@ -117,9 +116,12 @@ async function registration() {
   }
 
   try {
-    await userStore.registrateUser(formData.email, formData.password);
-    await addItem("users", formData);
-    await userStore.login(formData.email, formData.password);
+    await authStore.registrateUser(
+      formData.email,
+      formData.password,
+      formData.name
+    );
+    await authStore.login(formData.email, formData.password);
     router.push("/");
   } catch (error) {
     errorStore.setError(error);

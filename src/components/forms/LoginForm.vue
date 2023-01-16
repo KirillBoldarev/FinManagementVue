@@ -71,13 +71,13 @@ import { useRouter, useRoute } from "vue-router";
 import { reactive, onMounted } from "vue";
 import message from "@/composables/message";
 import messagesList from "@/composables/messagesList";
-import { monitorAuth } from "@/firebase/auth";
-import { useUserStore } from "@/stores/userStore";
+/* import { monitorAuth } from "@/firebase/auth"; */
+import { useAuthStore } from "@/stores/authStore";
 import { useErrorStore } from "@/stores/errorStore";
 
 const router = useRouter();
 const route = useRoute();
-const userStore = useUserStore();
+const authStore = useAuthStore();
 const errorStore = useErrorStore();
 
 const formData = reactive({ email: "", password: "" });
@@ -91,7 +91,7 @@ onMounted(() => {
   if (messagesList[route.query.message]) {
     message(messagesList[route.query.message]);
   }
-  monitorAuth();
+  /* monitorAuth(); */
 });
 
 function login() {
@@ -100,7 +100,7 @@ function login() {
     return;
   }
   try {
-    userStore.login(formData.email, formData.password).then(() => {
+    authStore.login(formData.email, formData.password).then(() => {
       router.push("/");
     });
   } catch (error) {

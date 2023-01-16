@@ -2,6 +2,8 @@
 import { defineStore } from "pinia";
 import { useErrorStore } from "./errorStore";
 import { ref } from "vue";
+import { useInfoStore } from "./infoStore";
+import { addDocToDatabase } from "@/firebase/database";
 
 import {
   getAuth,
@@ -13,9 +15,10 @@ import { firebaseApp } from "@/firebase/firebase";
 
 const auth = getAuth(firebaseApp);
 
-export const useUserStore = defineStore("user", () => {
-  const isAuth = ref({});
+export const useAuthStore = defineStore("auth", () => {
   const errorStore = useErrorStore();
+  const infoStore = useInfoStore();
+  const isAuth = ref({});
 
   async function login(email, password) {
     try {
@@ -27,9 +30,13 @@ export const useUserStore = defineStore("user", () => {
     }
   }
 
-  async function registrateUser(email, password) {
+  async function registrateUser(email, password, name) {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
+      addDocToDatabase("users/", getUId(), {
+        bill: 1000,
+        name,
+      });
     } catch (error) {
       errorStore.setError(error);
       throw error;
@@ -44,6 +51,7 @@ export const useUserStore = defineStore("user", () => {
   async function logout() {
     try {
       await signOut(auth);
+      infoStore.clearInfo();
       isAuth.value = {};
     } catch (error) {
       errorStore.setError(error);
