@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
+import { useInfoStore } from "@/stores/infoStore";
 
 const routes = [
   {
@@ -63,8 +64,12 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
+  const infoStore = useInfoStore();
+  if (!Object.keys(authStore.isAuth).length) {
+    await infoStore.fetchUserInfo();
+  }
   if (
     to.name !== "login" &&
     to.name !== "registration" &&
@@ -73,5 +78,4 @@ router.beforeEach((to, from, next) => {
     next({ name: "login" });
   else next();
 });
-
 export default router;

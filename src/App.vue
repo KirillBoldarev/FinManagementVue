@@ -1,3 +1,5 @@
+import LoaderVue from './components/tools/LoaderVue.vue';
+
 <template>
   <component v-if="layout" :is="layout">
     <router-view></router-view>
@@ -5,7 +7,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from "vue";
+import { computed } from "vue";
 import { useRoute } from "vue-router";
 import EmptyLayout from "./components/layouts/EmptyLayout.vue";
 import MainLayout from "./components/layouts/MainLayout.vue";
@@ -13,16 +15,14 @@ import { monitorAuth } from "@/firebase/auth";
 
 const route = useRoute();
 
-onMounted(() => {
-  monitorAuth();
-});
-
 const layout = computed(() => {
   if (route.meta.layout === "Empty") {
     return EmptyLayout;
   }
   return MainLayout;
 });
+
+monitorAuth();
 </script>
 
 <style lang="scss">
