@@ -1,4 +1,4 @@
-import { getDatabase, ref, set, child, get } from "firebase/database";
+import { getDatabase, ref, set, child, get, update } from "firebase/database";
 import { firebaseApp } from "./firebase";
 
 const database = getDatabase(firebaseApp);
@@ -20,4 +20,10 @@ export async function getDocFromDatabase(base, param) {
   } else {
     console.log("No data available");
   }
+}
+
+export async function updateDocInDatabase(path, payload) {
+  const updates = {};
+  updates[path] = payload;
+  return update(ref(database), updates);
 }

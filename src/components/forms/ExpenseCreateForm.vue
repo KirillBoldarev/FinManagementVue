@@ -9,6 +9,7 @@
         <div class="input-field">
           <input
             v-model="formData.name"
+            @blur="v$.$touch()"
             id="name"
             type="text"
             :class="{ invalid: v$.name.$dirty && v$.name.$invalid }"
@@ -24,6 +25,7 @@
         <div class="input-field">
           <input
             v-model.number="formData.limit"
+            @blur="v$.$touch()"
             id="limit"
             type="number"
             :class="{ invalid: v$.limit.$dirty && v$.limit.$invalid }"
@@ -58,12 +60,12 @@ const expensesStore = useExpensesStore();
 
 const formData = reactive({
   name: "",
-  limit: 0,
+  limit: null,
 });
 
 const rules = {
   name: { required },
-  limit: { minValue: minValue(1000) },
+  limit: { required, minValue: minValue(1000) },
 };
 
 const v$ = useVuelidate(rules, formData);
@@ -76,6 +78,7 @@ onMounted(() => {
 async function createExpense() {
   if (v$.value.$invalid) {
     v$.value.$touch();
+    return;
   }
   try {
     const expense = await expensesStore.createExpense(formData);

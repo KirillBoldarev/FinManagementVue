@@ -1,4 +1,8 @@
-import { addDocToDatabase } from "@/firebase/database";
+import {
+  addDocToDatabase,
+  getDocFromDatabase,
+  updateDocInDatabase,
+} from "@/firebase/database";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { useAuthStore } from "./authStore";
@@ -25,9 +29,29 @@ export const useExpensesStore = defineStore("expenses", () => {
       throw error;
     }
   }
+  async function fetchExpenses() {
+    const uid = await authStore.getUId();
+    const response = await getDocFromDatabase("users", `${uid}/expenses`);
+    if (response) {
+      return Object.keys(response).map((key) => ({
+        ...response[key],
+        id: key,
+      }));
+    }
+    return [];
+  }
+  async function updateExpenses(payload) {
+    const uid = await authStore.getUId();
+    await updateDocInDatabase(`/users/${uid}/expenses/${payload.id}`, {
+      name: payload.name,
+      limit: payload.limit,
+    });
+  }
 
   return {
     expenses,
     createExpense,
+    fetchExpenses,
+    updateExpenses,
   };
 });
