@@ -33,10 +33,14 @@ export const useAuthStore = defineStore("auth", () => {
   async function registrateUser(email, password, name) {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      addDocToDatabase("users/", getUId(), {
-        bill: 1000,
-        name,
-      });
+      addDocToDatabase(
+        "users/",
+        {
+          bill: 1000,
+          name,
+        },
+        getUId()
+      );
     } catch (error) {
       errorStore.setError(error);
       throw error;

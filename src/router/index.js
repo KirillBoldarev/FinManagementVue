@@ -25,7 +25,7 @@ const routes = [
     path: "/categories",
     name: "categories",
     meta: { layout: "Main" },
-    component: () => import("@/views/CategoriesPage.vue"),
+    component: () => import("@/views/ExpensesPage.vue"),
   },
   {
     path: "/history",

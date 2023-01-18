@@ -71,7 +71,6 @@ import { useRouter, useRoute } from "vue-router";
 import { reactive, onMounted } from "vue";
 import message from "@/composables/message";
 import messagesList from "@/composables/messagesList";
-/* import { monitorAuth } from "@/firebase/auth"; */
 import { useAuthStore } from "@/stores/authStore";
 import { useErrorStore } from "@/stores/errorStore";
 
@@ -91,7 +90,6 @@ onMounted(() => {
   if (messagesList[route.query.message]) {
     message(messagesList[route.query.message]);
   }
-  /* monitorAuth(); */
 });
 
 function login() {

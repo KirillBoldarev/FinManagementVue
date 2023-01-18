@@ -4,7 +4,7 @@ import { firebaseApp } from "./firebase";
 const database = getDatabase(firebaseApp);
 const databaseRef = ref(getDatabase(firebaseApp));
 
-export async function addDocToDatabase(base, param, object) {
+export async function addDocToDatabase(base, object, param = "") {
   try {
     set(ref(database, base + param), object);
   } catch (error) {
