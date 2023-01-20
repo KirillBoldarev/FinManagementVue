@@ -35,8 +35,8 @@ const links = ref([
   },
 
   {
-    title: "Категории",
-    path: "/categories",
+    title: "Статьи ДДС",
+    path: "/cashflow",
   },
 ]);
 </script>

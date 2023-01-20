@@ -1,37 +1,34 @@
 import {
   addDocToDatabase,
-  getDocFromDatabase,
-  updateDocInDatabase,
+  /*   getDocFromDatabase,
+  updateDocInDatabase, */
 } from "@/firebase/database";
 import { defineStore } from "pinia";
-import { ref } from "vue";
 import { useAuthStore } from "./authStore";
 import { useErrorStore } from "./errorStore";
 
-export const useExpensesStore = defineStore("expenses", () => {
+export const useRecordStore = defineStore("record", () => {
   const errorStore = useErrorStore();
   const authStore = useAuthStore();
 
-  const expenses = ref([]);
-
-  async function createExpense(payload) {
+  async function createRecord(payload) {
     try {
       const uid = await authStore.getUId();
-      const expenseId = Math.random().toString(36).substring(2, 9);
-      addDocToDatabase(`users/${uid}/expenses/${expenseId}`, payload);
+      const recordID = Math.random().toString(36).substring(2, 9);
+      addDocToDatabase(`users/${uid}/records/${recordID}`, payload);
       return {
-        id: expenseId,
-        name: payload.name,
-        limit: payload.limit,
+        id: recordID,
+        ...payload,
       };
     } catch (error) {
       errorStore.setError(error);
       throw error;
     }
   }
-  async function fetchExpenses() {
+
+  /*   async function fetchCashflows() {
     const uid = await authStore.getUId();
-    const response = await getDocFromDatabase("users", `${uid}/expenses`);
+    const response = await getDocFromDatabase("users", `${uid}/cashflows`);
     if (response) {
       return Object.keys(response).map((key) => ({
         ...response[key],
@@ -40,18 +37,18 @@ export const useExpensesStore = defineStore("expenses", () => {
     }
     return [];
   }
-  async function updateExpenses(payload) {
+
+  async function updateCashflows(payload) {
     const uid = await authStore.getUId();
-    await updateDocInDatabase(`/users/${uid}/expenses/${payload.id}`, {
+    await updateDocInDatabase(`/users/${uid}/cashflows/${payload.id}`, {
       name: payload.name,
       limit: payload.limit,
     });
-  }
+  } */
 
   return {
-    expenses,
-    createExpense,
-    fetchExpenses,
-    updateExpenses,
+    createRecord,
+    /*     fetchCashflows,
+    updateCashflows, */
   };
 });

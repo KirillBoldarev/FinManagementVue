@@ -4,7 +4,7 @@ import { useErrorStore } from "./errorStore";
 import { useAuthStore } from "./authStore";
 import { ref } from "vue";
 
-import { getDocFromDatabase } from "@/firebase/database";
+import { getDocFromDatabase, updateDocInDatabase } from "@/firebase/database";
 
 export const useInfoStore = defineStore("info", () => {
   const errorStore = useErrorStore();
@@ -14,7 +14,8 @@ export const useInfoStore = defineStore("info", () => {
   async function fetchUserInfo() {
     try {
       const uid = authStore.getUId();
-      const fetchedUser = await getDocFromDatabase("users", uid);
+      const fetchedUser = await getDocFromDatabase(`users/${uid}/info`);
+      console.log("fetchedUser", fetchedUser);
       info.value = fetchedUser;
     } catch (error) {
       errorStore.setError(error);
@@ -30,10 +31,21 @@ export const useInfoStore = defineStore("info", () => {
     return await result.json();
   }
 
+  async function updateInfo(payload) {
+    try {
+      const uid = await authStore.getUId();
+      console.log("payload ", payload);
+      await updateDocInDatabase(`/users/${uid}/info`, payload);
+    } catch (error) {
+      errorStore.setError(error);
+    }
+  }
+
   return {
     info,
     fetchUserInfo,
     clearInfo,
+    updateInfo,
     fetchCurrency,
   };
 });

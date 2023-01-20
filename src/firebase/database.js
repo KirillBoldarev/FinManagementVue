@@ -4,16 +4,16 @@ import { firebaseApp } from "./firebase";
 const database = getDatabase(firebaseApp);
 const databaseRef = ref(getDatabase(firebaseApp));
 
-export async function addDocToDatabase(base, object, param = "") {
+export async function addDocToDatabase(base, object) {
   try {
-    set(ref(database, base + param), object);
+    set(ref(database, base), object);
   } catch (error) {
     console.log(error);
   }
 }
 
-export async function getDocFromDatabase(base, param) {
-  const doc = await get(child(databaseRef, `${base}/${param}`));
+export async function getDocFromDatabase(path) {
+  const doc = await get(child(databaseRef, `${path}`));
   if (doc.exists()) {
     const result = doc.val();
     return result;

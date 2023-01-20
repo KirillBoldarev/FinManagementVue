@@ -22,10 +22,10 @@ const routes = [
     component: () => import("@/components/forms/RegistrationForm.vue"),
   },
   {
-    path: "/categories",
-    name: "categories",
+    path: "/cashflow",
+    name: "cashflow",
     meta: { layout: "Main" },
-    component: () => import("@/views/ExpensesPage.vue"),
+    component: () => import("@/views/CashflowPage.vue"),
   },
   {
     path: "/history",

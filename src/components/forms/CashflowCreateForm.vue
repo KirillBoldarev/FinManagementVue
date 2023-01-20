@@ -5,7 +5,7 @@
         <h4>Создать</h4>
       </div>
 
-      <form @submit.prevent="createExpense">
+      <form @submit.prevent="createCashflow">
         <div class="input-field">
           <input
             v-model="formData.name"
@@ -51,12 +51,12 @@
 import { reactive, onMounted } from "vue";
 import useVuelidate from "@vuelidate/core";
 import { required, minValue } from "@vuelidate/validators";
-import { useExpensesStore } from "@/stores/expensesStore";
+import { useCashflowStore } from "@/stores/cashflowStore";
 import message from "@/composables/message";
 
 const emit = defineEmits(["create"]);
 
-const expensesStore = useExpensesStore();
+const cashflowStore = useCashflowStore();
 
 const formData = reactive({
   name: "",
@@ -75,16 +75,16 @@ onMounted(() => {
   M.updateTextFields();
 });
 
-async function createExpense() {
+async function createCashflow() {
   if (v$.value.$invalid) {
     v$.value.$touch();
     return;
   }
   try {
-    const expense = await expensesStore.createExpense(formData);
+    const cashflow = await cashflowStore.createCashflow(formData);
     message(`Статья затрат "${formData.name}"" создана `);
     resetForm();
-    emit("create", expense);
+    emit("create", cashflow);
   } catch (error) {
     console.log(error);
   }
